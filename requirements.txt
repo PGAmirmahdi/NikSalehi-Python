@@ -2,3 +2,9 @@ uvicorn
 fastapi
 jinja2
 babel
+sqlalchemy
+pymysql
+alembic
+passlib[bcrypt]
+python-multipart
+httpx

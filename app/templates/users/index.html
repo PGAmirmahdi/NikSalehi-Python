@@ -1,0 +1,86 @@
+{% extends "layout.html" %}
+{% block title %}لیست کاربران{% endblock %}
+
+{% block content %}
+<section class="space-y-4">
+
+  <div class="bg-white border rounded-2xl p-4 shadow-sm">
+    <div class="flex flex-col md:flex-row gap-3 md:items-center md:justify-between">
+      <div>
+        <h1 class="text-lg font-semibold">کاربران</h1>
+        <p class="text-sm text-slate-500">مدیریت کاربران: ایجاد، ویرایش، حذف</p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-2 sm:items-center">
+        <form method="get" action="/users" class="relative">
+          <input name="q" value="{{ q }}" type="text" placeholder="جستجو با نام یا ایمیل..."
+                 class="w-full sm:w-80 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2 pr-10 text-sm outline-none focus:bg-white focus:ring-2 focus:ring-slate-200">
+          <span class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">🔎</span>
+        </form>
+
+        <a href="/users/create"
+           class="inline-flex items-center justify-center rounded-xl bg-slate-900 text-white px-4 py-2 text-sm hover:bg-slate-800">
+          +
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white border rounded-2xl shadow-sm overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="min-w-full text-sm">
+        <thead class="bg-slate-50 border-b">
+          <tr class="text-slate-600">
+            <th class="text-right px-4 py-3 font-medium">#</th>
+            <th class="text-right px-4 py-3 font-medium">نام</th>
+            <th class="text-right px-4 py-3 font-medium">نام خانوادگی</th>
+            <th class="text-right px-4 py-3 font-medium">ایمیل</th>
+            <th class="text-right px-4 py-3 font-medium">عملیات</th>
+          </tr>
+        </thead>
+
+        <tbody class="divide-y">
+          {% if users and users|length > 0 %}
+            {% for u in users %}
+              <tr class="hover:bg-slate-50">
+                <td class="px-4 py-3 text-slate-500">{{ loop.index }}</td>
+                <td class="px-4 py-3 font-medium">{{ u.first_name }}</td>
+                <td class="px-4 py-3">{{ u.last_name or "-" }}</td>
+                <td class="px-4 py-3">
+                  <span class="inline-flex items-center gap-2 rounded-xl bg-slate-100 px-3 py-1">
+                    <span class="text-slate-500">✉</span>
+                    <span class="font-medium">{{ u.email }}</span>
+                  </span>
+                </td>
+                <td class="px-4 py-3">
+                  <div class="flex items-center gap-2">
+                    <a href="/users/{{ u.id }}/edit"
+                       class="px-3 py-2 rounded-xl text-yellow-600 bg-yellow-200 duration-150 text-xs hover:bg-yellow-300 hover:text-yellow-800">
+                        <i class="fa fa-edit"></i>
+                    </a>
+
+                    <form method="post" action="/users/{{ u.id }}/delete"
+                          onsubmit="return confirm('مطمئنی می‌خوای این کاربر حذف بشه؟')">
+                      <button type="submit"
+                              class="px-3 py-2 rounded-xl text-red-600 bg-red-200 duration-150 text-xs hover:bg-red-300 hover:text-red-800">
+                        <i class="fa fa-trash"></i>
+                      </button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="5" class="px-4 py-10 text-center text-slate-500">
+                هنوز هیچ کاربری ثبت نشده است.
+              </td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</section>
+{% endblock %}
